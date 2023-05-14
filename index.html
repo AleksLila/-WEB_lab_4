@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Letter Count App</title>
+    </head>
+    <body>
+		<style>	form { margin-top:50px;}	</style>
+        <form action="/" method="post">
+            <input type="text" id="text" name="text">
+            </br></br>
+            <button type="submit">Count Letters</button>
+        </form> 
+		
+		<style>
+			h2 { 
+			font-size: 100%; 
+			font-family: Verdana, Helvetica, sans-serif; 
+			color: #000080;
+			margin-top:50px;
+			line-height: 2.5;
+			}
+		</style>
+		<h2>
+        <div id="result1"></div>
+		<div id="result2"></div>
+		<div id="result3"></div>
+		</h2>
+        <script>
+            const form=document.querySelector('form');
+            const resultDiv1=document.querySelector('#result1');
+			const resultDiv2=document.querySelector('#result2');
+			const resultDiv3=document.querySelector('#result3');
+            form.addEventListener('submit',(event)=>{
+                event.preventDefault();
+
+                const formData = new FormData(event.target);
+                const text = formData.get('text');
+
+                fetch('/',{
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: new URLSearchParams(formData)
+                })
+                .then(responce => responce.json())
+                .then(data =>{
+                    resultDiv1.textContent = `The text : "${text}" contains :`;
+					resultDiv2.textContent = ` Upper letters: ${data.countUpper}`;
+					resultDiv3.textContent = ` Lower letters: ${data.countLower}`;
+				})
+                .catch(error => {
+                    console.error(error);
+                });
+            });
+            
+        </script>
+    </body>
+</html>
